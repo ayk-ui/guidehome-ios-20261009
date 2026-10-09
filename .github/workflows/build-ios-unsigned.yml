@@ -31,6 +31,38 @@ jobs:
         timeout-minutes: 15
         run: bash scripts/build.sh unsigned
 
+      - name: Inspect compiled AppIcon catalog
+        timeout-minutes: 1
+        run: |
+          TASK_ICON_CATALOG="build/DerivedData/Build/Products/Release-iphoneos/GuideHome.app/Assets.car"
+          test -s "$TASK_ICON_CATALOG"
+          /usr/bin/assetutil --info "$TASK_ICON_CATALOG" > "$RUNNER_TEMP/guidehome-assetutil.json"
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          ipa = Path('build/unsigned/GuideHome-unsigned.ipa')
+          car = Path('build/DerivedData/Build/Products/Release-iphoneos/GuideHome.app/Assets.car')
+          catalog = json.loads((Path(os.environ['RUNNER_TEMP']) / 'guidehome-assetutil.json').read_text(encoding='utf-8'))
+          if not isinstance(catalog, list) or not catalog:
+              raise SystemExit('No compiled asset catalog records')
+          def digest(path):
+              with path.open('rb') as stream:
+                  return hashlib.file_digest(stream, 'sha256').hexdigest()
+          report = {
+              'tool': '/usr/bin/assetutil --info',
+              'sourceCommit': os.environ['GITHUB_SHA'],
+              'runId': os.environ['GITHUB_RUN_ID'],
+              'runAttempt': os.environ['GITHUB_RUN_ATTEMPT'],
+              'ipaSha256': digest(ipa),
+              'carSha256': digest(car),
+              'catalog': catalog,
+          }
+          Path('build/unsigned/compiled-icons.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+
       - name: Upload unsigned package to a prerelease
         timeout-minutes: 3
         env:
@@ -64,7 +96,8 @@ jobs:
           ipa = output / 'GuideHome-unsigned.ipa'
           checksum = output / 'GuideHome-unsigned.ipa.sha256'
           unsigned_note = output / '未签名说明.txt'
-          assets = [ipa, checksum, unsigned_note]
+          icon_report = output / 'compiled-icons.json'
+          assets = [ipa, checksum, unsigned_note, icon_report]
           for asset in assets:
               if asset.is_symlink() or not asset.is_file() or not 0 < asset.stat().st_size < 2 * 1024**3:
                   raise SystemExit('Expected build output missing or outside Release file limit')
