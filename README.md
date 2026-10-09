@@ -2,7 +2,7 @@
 
 这是原生 iOS App 的 Xcode 源码工程，不是 IPA 安装包。App 在自己的全屏 WKWebView 内打开现有界面，没有 Safari 地址栏、主屏幕安装说明或额外 App 页面。原有网站后台、账号、头像和资料继续使用同一套服务。
 
-当前交付在 Windows 完成，缺少 Xcode/iOS SDK，尚未编译、签名或进行实体 iPhone 验证。本目录不包含 IPA、签名证书、描述文件或苹果账号密码。
+本目录只包含源码，不包含 IPA、签名证书、描述文件或苹果账号密码。源码静态检查不能替代 Xcode 编译和实体 iPhone 验证；对应安装包及编译结果请查看本项目的 GitHub Actions 和 Releases。安装到自己的 iPhone 仍需个人签名。
 
 默认入口：`https://dyzj-ios-tingt02191010.netlify.app/ios-v3-0-1/mobile/`。后台 API 保持原样。站内页面在 App 打开；外部用户点击的网页链接交给 Safari，电话/邮件链接交给系统。原有照片/文件输入使用 WebKit 系统选择器。登录数据保存在 App 自己的持久 WebKit 数据区。
 
