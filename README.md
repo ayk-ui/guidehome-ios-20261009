@@ -18,9 +18,9 @@ Xcode 编译未签名包：`bash scripts/build.sh unsigned`。产物在 `build/u
 
 ## 只有 Windows：自己的 GitHub 编译
 
-将本 `GuideHome` 文件夹的内容放在自己的 GitHub 仓库根目录，确保 `.github/workflows/build-ios-unsigned.yml` 也在仓库内。在 Actions 选择 **Build unsigned iOS app → Run workflow**。工作流只使用 GitHub 的 macOS runner 编译并打包，成功后下载 `GuideHome-UNSIGNED-cannot-install-directly` artifact。
+将本 `GuideHome` 文件夹的内容放在自己的公开 GitHub 仓库根目录，确保 `.github/workflows/build-ios-unsigned.yml` 已提交到默认分支。在 Actions 选择 **Build unsigned iOS app to Release → Run workflow** 并选择默认分支。工作流使用标准 `macos-15` 环境编译，成功后在 Releases 下载 `unsigned-运行ID-重试次数` 中的 `GuideHome-unsigned.ipa`。
 
-这个流程不需要上传 Apple 密码或签名密钥，但生成的仍是未签名 IPA，不能直接手机安装。真正安装仍需你选择可用的合法签名/个人设备开发方式。GitHub Actions 的可用额度取决于仓库及账号方案；本工作流不会自动开启收费服务或创建苹果账号。
+这个流程使用 GitHub 自动提供的短期仓库令牌保存安装包，无需上传 Apple 密码或签名密钥。公开仓库的标准运行环境免费；产物保存到 Releases，不占 Actions artifact 配额。生成的仍是未签名 IPA，需要在自己的电脑上使用自己的苹果账号进行个人设备签名安装，例如 Windows 的 AltStore Classic。工作流不会更改计费设置或创建苹果账号。
 
 ## 工程边界与检查
 

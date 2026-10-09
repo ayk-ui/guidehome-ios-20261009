@@ -1,27 +1,107 @@
-name: Build unsigned iOS app
+name: Build unsigned iOS app to Release
+
 on:
   workflow_dispatch:
-permissions:
-  contents: read
+
+permissions: {}
+
 concurrency:
-  group: guide-ios-unsigned-${{ github.ref }}
+  group: guide-ios-unsigned-release-${{ github.ref }}
   cancel-in-progress: false
+
 jobs:
   unsigned-ios:
+    # This alternative is reviewed for a public repository and standard runner.
+    if: ${{ github.event.repository.private == false && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
     runs-on: macos-15
     timeout-minutes: 20
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ github.sha }}
           persist-credentials: false
+
       - name: Check Xcode
+        timeout-minutes: 1
         run: xcodebuild -version
+
       - name: Compile device app and package unsigned IPA
+        timeout-minutes: 15
         run: bash scripts/build.sh unsigned
-      - name: Store unsigned build output
-        uses: actions/upload-artifact@v7
-        with:
-          name: GuideHome-UNSIGNED-cannot-install-directly
-          path: build/unsigned/
-          if-no-files-found: error
-          retention-days: 7
+
+      - name: Upload unsigned package to a prerelease
+        timeout-minutes: 3
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PROMPT_DISABLED: "1"
+          GH_NO_UPDATE_NOTIFIER: "1"
+          GH_NO_EXTENSION_UPDATE_NOTIFIER: "1"
+          TASK_REPOSITORY: ${{ github.repository }}
+          TASK_COMMIT: ${{ github.sha }}
+          TASK_RUN_ID: ${{ github.run_id }}
+          TASK_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+
+          repository = os.environ['TASK_REPOSITORY']
+          commit = os.environ['TASK_COMMIT']
+          run_id = os.environ['TASK_RUN_ID']
+          attempt = os.environ['TASK_RUN_ATTEMPT']
+          if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', repository):
+              raise SystemExit('Unexpected repository format')
+          if not re.fullmatch(r'[0-9a-f]{40}', commit):
+              raise SystemExit('Unexpected commit format')
+          if not re.fullmatch(r'[0-9]+', run_id) or not re.fullmatch(r'[1-9][0-9]*', attempt):
+              raise SystemExit('Unexpected run identity')
+          output = Path('build/unsigned')
+          ipa = output / 'GuideHome-unsigned.ipa'
+          checksum = output / 'GuideHome-unsigned.ipa.sha256'
+          unsigned_note = output / '未签名说明.txt'
+          assets = [ipa, checksum, unsigned_note]
+          for asset in assets:
+              if asset.is_symlink() or not asset.is_file() or not 0 < asset.stat().st_size < 2 * 1024**3:
+                  raise SystemExit('Expected build output missing or outside Release file limit')
+          if checksum.stat().st_size > 4096:
+              raise SystemExit('Unexpected checksum sidecar size')
+          with ipa.open('rb') as stream:
+              digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+          claimed = checksum.read_text(encoding='utf-8').split(maxsplit=1)[0]
+          if not re.fullmatch(r'[0-9a-fA-F]{64}', claimed) or claimed.lower() != digest:
+              raise SystemExit('IPA checksum sidecar does not match actual package')
+          tag = f'unsigned-{run_id}-{attempt}'
+          notes = Path(os.environ['RUNNER_TEMP']) / f'guidehome-{tag}-notes.md'
+          notes.write_text(
+              'GuideHome 3.0.1: unsigned iPhone device build.\n\n'
+              'This IPA was compiled by Xcode for iPhoneOS. It has no installable Apple signing or provisioning configuration. '
+              'It cannot be installed directly by tapping a download link. Sign it using your own legitimate Apple account and device installation tool.\n\n'
+              f'Source commit: {commit}\n'
+              f'Build run: {run_id}, attempt {attempt}\n'
+              f'IPA SHA256: {digest}\n\n'
+              '未签名 IPA：下载文件不等于已经可以在 iPhone 上直接安装。需要使用自己的苹果账号完成合法自用签名和安装。\n',
+              encoding='utf-8'
+          )
+          # gh create with assets uploads to a draft before publishing it.
+          # Pin the automatic tag to the exact checked-out source commit.
+          subprocess.run([
+              'gh', 'release', 'create', tag,
+              *[str(asset) for asset in assets],
+              '--repo', repository,
+              '--target', commit,
+              '--title', f'GuideHome 3.0.1 UNSIGNED - cannot install directly ({run_id}.{attempt})',
+              '--notes-file', str(notes),
+              '--prerelease', '--latest=false'
+          ], check=True, timeout=150)
+          release_url = f'https://github.com/{repository}/releases/tag/{tag}'
+          summary = Path(os.environ['GITHUB_STEP_SUMMARY'])
+          with summary.open('a', encoding='utf-8') as stream:
+              stream.write(f'Unsigned package: [{tag}]({release_url})\n\n')
+              stream.write('This is an unsigned iPhoneOS build; direct iPhone installation is not verified.\n\n')
+              stream.write(f'Source commit: `{commit}`\n\nIPA SHA256: `{digest}`\n')
+          PY
