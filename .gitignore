@@ -1,0 +1,9 @@
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.mobileprovision
+*.p12
+*.cer
+*.key
+ExportOptions.private.plist

@@ -1,0 +1,13 @@
+{
+  "entryURL": "https://dyzj-ios-tingt02191010.netlify.app/ios-v3-0-1/mobile/",
+  "backendAPI": "https://ayk-d1g2hhlsnfdfbdbd4-1502230120.ap-shanghai.app.tcloudbase.com/guide-app",
+  "mobileAppSha256": "c78456d88980ff0cd4f4e03f78f3aa815b15d542f0d2e5aed3bb2b60aa478fe0",
+  "mobileStylesSha256": "e7b67475ca3f576d08502846488df37cf03b1ed0b8e3954669036d425b4f5773",
+  "originalIconSha256": "a6dce60b59d74d41d0db9433fa52dcdcd7fd04ba293e7ad0d62c6b6ca70bfc12",
+  "uiAndBackendModified": false,
+  "nativeRendering": "UIKit + WKWebView",
+  "sourceOnly": true,
+  "compiled": false,
+  "signed": false,
+  "installableIPAProduced": false
+}

@@ -1,0 +1,27 @@
+name: Build unsigned iOS app
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: guide-ios-unsigned-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  unsigned-ios:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Check Xcode
+        run: xcodebuild -version
+      - name: Compile device app and package unsigned IPA
+        run: bash scripts/build.sh unsigned
+      - name: Store unsigned build output
+        uses: actions/upload-artifact@v7
+        with:
+          name: GuideHome-UNSIGNED-cannot-install-directly
+          path: build/unsigned/
+          if-no-files-found: error
+          retention-days: 7

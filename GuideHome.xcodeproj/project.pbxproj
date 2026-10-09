@@ -1,0 +1,35 @@
+// !$*UTF8*$!
+{
+ archiveVersion = 1;
+ classes = {};
+ objectVersion = 56;
+ objects = {
+  93BCE2B05881516F2175AB74 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+  FAD74862366BFD153816146C = { isa = PBXBuildFile; fileRef = 93BCE2B05881516F2175AB74; };
+  104C143E3D26579A76985146 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+  EE8CFAAA94BD61729114019A = { isa = PBXBuildFile; fileRef = 104C143E3D26579A76985146; };
+  8DAE8284F7B78531DD1BA46B = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+  192E529573E9997FBFDD0279 = { isa = PBXBuildFile; fileRef = 8DAE8284F7B78531DD1BA46B; };
+  C0C3B4BCA5678717834B8E72 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
+  7B8796291E6828A85D45FF8B = { isa = PBXBuildFile; fileRef = C0C3B4BCA5678717834B8E72; };
+  76208D4E60EAC49951A5E351 = { isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+  654722043A12F36BDC109460 = { isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+  3A147AD878B8D467EA0A224F = { isa = PBXBuildFile; fileRef = 654722043A12F36BDC109460; };
+  730A353C5C841F64CF32A965 = { isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GuideHome.app; sourceTree = BUILT_PRODUCTS_DIR; };
+  09251AC9270306F5563A568C = { isa = PBXGroup; children = (93BCE2B05881516F2175AB74,104C143E3D26579A76985146,8DAE8284F7B78531DD1BA46B,C0C3B4BCA5678717834B8E72,76208D4E60EAC49951A5E351,654722043A12F36BDC109460); path = GuideHome; sourceTree = "<group>"; };
+  AC50002E51F3499EB5FBD153 = { isa = PBXGroup; children = (730A353C5C841F64CF32A965); name = Products; sourceTree = "<group>"; };
+  402B073F900E91B906072DE6 = { isa = PBXGroup; children = (09251AC9270306F5563A568C,AC50002E51F3499EB5FBD153); sourceTree = "<group>"; };
+  886EA63A09DE56E82DEDE315 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (FAD74862366BFD153816146C,EE8CFAAA94BD61729114019A,192E529573E9997FBFDD0279,7B8796291E6828A85D45FF8B); runOnlyForDeploymentPostprocessing = 0; };
+  059BC5B7150F371E001EA860 = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (3A147AD878B8D467EA0A224F); runOnlyForDeploymentPostprocessing = 0; };
+  FC2119581913661E978700B6 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+  94CDEC75C10E06B1FBC9D1DA = { isa = XCBuildConfiguration; buildSettings = { CLANG_ENABLE_MODULES = YES; SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SWIFT_VERSION = 5.0; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; DEBUG_INFORMATION_FORMAT = dwarf; }; name = Debug; };
+  2ADED405FA809E2BE76C3973 = { isa = XCBuildConfiguration; buildSettings = { ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GuideHome/Info.plist; MARKETING_VERSION = 3.0.1; PRODUCT_BUNDLE_IDENTIFIER = com.example.guidehome; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; TARGETED_DEVICE_FAMILY = 1; SUPPORTS_MACCATALYST = NO; SWIFT_EMIT_LOC_STRINGS = NO; SWIFT_VERSION = 5.0; IPHONEOS_DEPLOYMENT_TARGET = 15.0; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; }; name = Debug; };
+  60EA3C45220DA92D59CBB9EF = { isa = XCBuildConfiguration; buildSettings = { CLANG_ENABLE_MODULES = YES; SDKROOT = iphoneos; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SWIFT_VERSION = 5.0; SWIFT_OPTIMIZATION_LEVEL = "-O"; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; }; name = Release; };
+  EA44F93B39D2131586E472EB = { isa = XCBuildConfiguration; buildSettings = { ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = GuideHome/Info.plist; MARKETING_VERSION = 3.0.1; PRODUCT_BUNDLE_IDENTIFIER = com.example.guidehome; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; TARGETED_DEVICE_FAMILY = 1; SUPPORTS_MACCATALYST = NO; SWIFT_EMIT_LOC_STRINGS = NO; SWIFT_VERSION = 5.0; IPHONEOS_DEPLOYMENT_TARGET = 15.0; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks"; }; name = Release; };
+  B2FA0E6E3BE9A4E3587D0101 = { isa = XCConfigurationList; buildConfigurations = (94CDEC75C10E06B1FBC9D1DA,60EA3C45220DA92D59CBB9EF); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  3961D7BABD31CDF6834D766A = { isa = XCConfigurationList; buildConfigurations = (2ADED405FA809E2BE76C3973,EA44F93B39D2131586E472EB); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  668D1E2BB09A2D3DA4007A36 = { isa = PBXNativeTarget; buildConfigurationList = 3961D7BABD31CDF6834D766A; buildPhases = (886EA63A09DE56E82DEDE315,FC2119581913661E978700B6,059BC5B7150F371E001EA860); buildRules = (); dependencies = (); name = GuideHome; productName = GuideHome; productReference = 730A353C5C841F64CF32A965; productType = "com.apple.product-type.application"; };
+  2A5DADD9AAA59A9448F15AC8 = { isa = PBXProject; attributes = { BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 1600; TargetAttributes = { 668D1E2BB09A2D3DA4007A36 = { CreatedOnToolsVersion = 16.0; }; }; }; buildConfigurationList = B2FA0E6E3BE9A4E3587D0101; compatibilityVersion = "Xcode 14.0"; developmentRegion = zh_CN; hasScannedForEncodings = 0; knownRegions = (zh_CN,en,Base); mainGroup = 402B073F900E91B906072DE6; productRefGroup = AC50002E51F3499EB5FBD153; projectDirPath = ""; projectRoot = ""; targets = (668D1E2BB09A2D3DA4007A36); };
+ };
+ rootObject = 2A5DADD9AAA59A9448F15AC8;
+}
